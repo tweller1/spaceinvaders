@@ -1,0 +1,14 @@
+digraph G {
+BA -> DMD;
+DMD -> WORKSHOP;
+WORKSHOP -> LECTURE;
+LECTURE -> ASSIGNMENT;
+WORKSHOP -> ASSIGNMENT;
+ASSIGNMENT -> BA;
+overlap=false
+label=
+"DMD Workshop Example"
+fontsize=
+12
+;
+}
