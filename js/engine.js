@@ -1,5 +1,5 @@
 var Game = new function() {                                                     //changing keys             
-  var KEY_CODES = { 37 :'left', 40 : 'up', 39 : 'right', 38: 'down', 32 :'fire' };
+  var KEY_CODES = { 37 :'left', 40 : 'up', 39 : 'right', 38: 'down', 32 :'fire', 112 : 'p' };
   this.keys = {};
 
   this.initialize = function(canvas_dom,level_data,sprite_data,callbacks) {
@@ -200,3 +200,13 @@ var GameAudio = new function() {
   };
 };
 
+
+function pauseGame() {
+      if (!gamePaused) {
+        game = clearTimeout(game);
+        gamePaused = true;
+      } else if (gamePaused) {
+        game = setTimeout(gameLoop, 1000 / 30);
+        gamePaused = false;
+      }
+    }

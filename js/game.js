@@ -4,7 +4,7 @@ var AlienFlock = function AlienFlock() {
   this.dx = 10; this.dy = 0;
   this.hit = 1; this.lastHit = 0;
     //overall speed
-  this.speed = 10;
+  this.speed = 7;
 
   this.draw = function() {};
 
@@ -16,7 +16,7 @@ var AlienFlock = function AlienFlock() {
       Game.callbacks['win']();
     }
   }
-
+//increases speed of the last aliens
   this.step = function(dt) { 
     if(this.hit && this.hit != this.lastHit) {
       this.lastHit = this.hit;
@@ -103,7 +103,7 @@ Player.prototype.die = function() {
 
 //change for extra functionality
 Player.prototype.step = function(dt) {
-  if(Game.keys['left']) { this.x -= 100 * dt; }
+  if(Game.keys['left']) { this.x = 100 * dt; }
   if(Game.keys['right']) { this.x += 100 * dt; }
   if(Game.keys['up']) {this.y += 100 * dt; }
   if(Game.keys['down']) {this.y -= 100 * dt; }
@@ -113,6 +113,8 @@ Player.prototype.step = function(dt) {
   if(this.x > Game.width-this.w) this.x = Game.width-this.w;
   if(this.y > Game.height-this.h) this.y = Game.height-this.h;
 
+  if(Game.keys['p']) { Game.callbacks['pause'](); }    
+    
   this.reloading--;
 
   if(Game.keys['fire'] && this.reloading <= 0 && this.board.missiles < 3) {

@@ -73,6 +73,17 @@
                                  });
     Game.loadBoard(screen);
   }
+          
+ //pause screen
+     function pauseGame() {
+    var screen = new GameScreen("Game Paused",
+                                 function() {
+                                     Game.loadBoard(new GameBoard(1));
+                                 });
+    Game.loadBoard(screen);
+  }
+
+          
 
 //sound fire (shot by player) sound die (hit invaders)
   $(function() {
@@ -81,7 +92,8 @@
                        Game.initialize("#gameboard", levelData, spriteData,
                                       { "start": startGame,
                                         "die"  : endGame,
-                                        "win"  : winGame });
+                                        "win"  : winGame,
+                                        "pause"});
                    });
    });
 
