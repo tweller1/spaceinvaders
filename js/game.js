@@ -101,12 +101,17 @@ Player.prototype.die = function() {
   Game.callbacks['die']();
 }
 
+//change for extra functionality
 Player.prototype.step = function(dt) {
   if(Game.keys['left']) { this.x -= 100 * dt; }
   if(Game.keys['right']) { this.x += 100 * dt; }
+  if(Game.keys['up']) {this.y += 100 * dt; }
+  if(Game.keys['down']) {this.y -= 100 * dt; }
 
   if(this.x < 0) this.x = 0;
+  if(this.y < 0) this.y = 0;
   if(this.x > Game.width-this.w) this.x = Game.width-this.w;
+  if(this.y > Game.height-this.h) this.y = Game.height-this.h;
 
   this.reloading--;
 
@@ -149,13 +154,30 @@ Missile.prototype.die = function() {
    this.board.remove(this);
 }
 
+//initialising explosion function
+
 var Explosion = function Explosion(opts) {
-   
+   this.dy = opts.dy;
+   this.player = opts.player;
 }
 
-Explosion.prototype.draw = function() {
-    
+Explosion.prototype.draw = function(canvas) {
+   Sprites.draw(canvas,'explosion',this.x,this.y);
 }
 
+Explosion.prototype.step = function(dt) {
+     var enemy = this.board.collide(this);
+     if(enemy) { 
+     enemy.die();
+     return false;
+   }
+   return (this.y < 0 || this.y > Game.height) ? false : true;
+}
+
+Explosion.prototype.die = function() {
+  if(this.player) this.board.explosion--;
+  if(this.board.missiles < 0) this.board.missiles=0;
+   this.board.remove(this);
+}
 
 
