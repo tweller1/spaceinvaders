@@ -4,7 +4,7 @@ var AlienFlock = function AlienFlock() {
   this.dx = 10; this.dy = 0;
   this.hit = 1; this.lastHit = 0;
     //overall speed
-  this.speed = 7;
+  this.speed = 5;
 
   this.draw = function() {};
 
@@ -57,10 +57,13 @@ Alien.prototype.draw = function(canvas) {
 }
 
 Alien.prototype.die = function() {
+        //Missile.prototype.draw = function(canvas) {
+        //Sprites.draw(canvas,'missile',this.x,this.y);
+
   GameAudio.play('die');
-  //Explosion.draw();
   this.flock.speed += 1;
-  this.board.remove(this);
+  this.board.remove(this);   
+  
 }
 
 Alien.prototype.step = function(dt) {
@@ -72,7 +75,7 @@ Alien.prototype.step = function(dt) {
     }
     this.x += this.mx;
     this.mx = 0;
-    this.frame = (this.frame+1) % 2;
+    this.frame = (this.frame+1) % 3;
     if(this.x > Game.width - Sprites.map.alien1.w * 2) this.flock.hit = -1;
     if(this.x < Sprites.map.alien1.w) this.flock.hit = 1;
   }
@@ -103,7 +106,7 @@ Player.prototype.die = function() {
 
 //change for extra functionality
 Player.prototype.step = function(dt) {
-  if(Game.keys['left']) { this.x = 100 * dt; }
+  if(Game.keys['left']) { this.x -= 100 * dt; }
   if(Game.keys['right']) { this.x += 100 * dt; }
   if(Game.keys['up']) {this.y += 100 * dt; }
   if(Game.keys['down']) {this.y -= 100 * dt; }
@@ -156,30 +159,20 @@ Missile.prototype.die = function() {
    this.board.remove(this);
 }
 
+//initialising pause function
+
+
+//if(Game.keys['p']){
+//setTimeout(function() {alert('hello');},
+
+
 //initialising explosion function
 
-var Explosion = function Explosion(opts) {
-   this.dy = opts.dy;
-   this.player = opts.player;
-}
-
-Explosion.prototype.draw = function(canvas) {
-   Sprites.draw(canvas,'explosion',this.x,this.y);
-}
-
-Explosion.prototype.step = function(dt) {
-     var enemy = this.board.collide(this);
-     if(enemy) { 
-     enemy.die();
-     return false;
-   }
-   return (this.y < 0 || this.y > Game.height) ? false : true;
-}
-
-Explosion.prototype.die = function() {
-  if(this.player) this.board.explosion--;
-  if(this.board.missiles < 0) this.board.missiles=0;
-   this.board.remove(this);
-}
-
-
+//function draw() {
+//var ctx = document.getElementById('explosion')
+//var ctx = canvas.getContext('2d'); //create new img element
+//img.src = spriteData.explosion //set source path
+//img.addEventListener("load", function() {
+    //execute drawImage statements here
+//}, false);
+//img.src = 'myImage.png';

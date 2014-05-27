@@ -2,9 +2,12 @@ var Game = new function() {                                                     
   var KEY_CODES = { 37 :'left', 40 : 'up', 39 : 'right', 38: 'down', 32 :'fire', 112 : 'p' };
   this.keys = {};
 
+    
+    //creates canvas and sets a drawing context of 2D graphics
   this.initialize = function(canvas_dom,level_data,sprite_data,callbacks) {
     this.canvas_elem = $(canvas_dom)[0];
     this.canvas = this.canvas_elem.getContext('2d');
+  //}else{ //canvas-unsupported code here
     this.width = $(this.canvas_elem).attr('width');
     this.height= $(this.canvas_elem).attr('height');
 
@@ -30,6 +33,7 @@ var Game = new function() {                                                     
   };
 };
 
+//creates sprite data link to game
 var Sprites = new function() {
   this.map = { }; 
 
@@ -39,7 +43,7 @@ var Sprites = new function() {
     this.image.onload = callback;
     this.image.src = 'images/sprites.png';
   };
-
+//draws out sprites based on data provided in level.js
   this.draw = function(canvas,sprite,x,y,frame) {
     var s = this.map[sprite];
     if(!frame) frame = 0;
@@ -52,6 +56,7 @@ var GameScreen = function GameScreen(text,text2,callback) {
     if(Game.keys['fire'] && callback) callback();
   };
 
+    //creating styles
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
     canvas.font = "bold 40px arial";
@@ -201,12 +206,3 @@ var GameAudio = new function() {
 };
 
 
-function pauseGame() {
-      if (!gamePaused) {
-        game = clearTimeout(game);
-        gamePaused = true;
-      } else if (gamePaused) {
-        game = setTimeout(gameLoop, 1000 / 30);
-        gamePaused = false;
-      }
-    }
