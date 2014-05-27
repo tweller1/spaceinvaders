@@ -44,8 +44,6 @@ var AlienFlock = function AlienFlock() {
 
 }
 
-
-
 var Alien = function Alien(opts) {
   this.flock = opts['flock'];
   this.frame = 0;
@@ -57,9 +55,7 @@ Alien.prototype.draw = function(canvas) {
 }
 
 Alien.prototype.die = function() {
-        //Missile.prototype.draw = function(canvas) {
-        //Sprites.draw(canvas,'missile',this.x,this.y);
-
+  Sprites.draw(canvas,'explosion',this.x,this.y);
   GameAudio.play('die');
   this.flock.speed += 1;
   this.board.remove(this);   
@@ -167,6 +163,16 @@ Missile.prototype.die = function() {
 
 
 //initialising explosion function
+
+var Explosion = function Explosion(opts) {
+   this.dy = opts.dy;
+   this.player = opts.player;
+}
+
+Explosion.prototype.draw = function(canvas) {
+   Sprites.draw(canvas,'explosion',this.x,this.y);
+}
+
 
 //function draw() {
 //var ctx = document.getElementById('explosion')
