@@ -7,10 +7,12 @@ var Game = new function() {                                                     
   this.initialize = function(canvas_dom,level_data,sprite_data,callbacks) {
     this.canvas_elem = $(canvas_dom)[0];
     this.canvas = this.canvas_elem.getContext('2d');
-  //}else{ //canvas-unsupported code here
+      //what to do if browser cannot run canvas
+    if(!this.canvas) { return alert("You need to upgrade your browser to play this game"); }
     this.width = $(this.canvas_elem).attr('width');
     this.height= $(this.canvas_elem).attr('height');
 
+      
     $(window).keydown(function(event) {
       if(KEY_CODES[event.keyCode]) Game.keys[KEY_CODES[event.keyCode]] = true;
     });
@@ -204,5 +206,3 @@ var GameAudio = new function() {
     }
   };
 };
-
-

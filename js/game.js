@@ -55,7 +55,7 @@ Alien.prototype.draw = function(canvas) {
 }
 
 Alien.prototype.die = function() {
-  Sprites.draw(canvas,'explosion',this.x,this.y);
+  //this.board.addSprite('explosion');
   GameAudio.play('die');
   this.flock.speed += 1;
   this.board.remove(this);   
@@ -100,7 +100,7 @@ Player.prototype.die = function() {
   Game.callbacks['die']();
 }
 
-//change for extra functionality
+//changed for extra functionality
 Player.prototype.step = function(dt) {
   if(Game.keys['left']) { this.x -= 100 * dt; }
   if(Game.keys['right']) { this.x += 100 * dt; }
@@ -111,8 +111,6 @@ Player.prototype.step = function(dt) {
   if(this.y < 0) this.y = 0;
   if(this.x > Game.width-this.w) this.x = Game.width-this.w;
   if(this.y > Game.height-this.h) this.y = Game.height-this.h;
-
-  if(Game.keys['p']) { Game.callbacks['pause'](); }    
     
   this.reloading--;
 
@@ -156,6 +154,16 @@ Missile.prototype.die = function() {
 }
 
 //initialising pause function
+//if(Game.keys['p']) {
+ //       function pauseGame() {
+//          if (!gamePaused) {
+//            game =  this.loop
+//            gamePaused = true;
+//                } else if (gamePaused) {
+//            game = setTimeout(gameLoop, 1000 / 30);
+//            gamePaused = false;
+ // }
+//}
 
 
 //if(Game.keys['p']){
@@ -165,8 +173,6 @@ Missile.prototype.die = function() {
 //initialising explosion function
 
 var Explosion = function Explosion(opts) {
-   this.dy = opts.dy;
-   this.player = opts.player;
 }
 
 Explosion.prototype.draw = function(canvas) {
