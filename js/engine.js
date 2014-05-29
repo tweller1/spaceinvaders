@@ -27,11 +27,13 @@ var Game = new function() {                                                     
   };
 
   this.loadBoard = function(board) { Game.board = board; };
-
+//creates game speed
   this.loop = function() { 
     Game.board.step(30/1000); 
     Game.board.render(Game.canvas);
-    setTimeout(Game.loop,4);
+    //setTimeout(Game.loop,4);
+    this.timer = setTimeout(Game.loop,4);
+    return this.timer();
   };
 };
 
@@ -58,7 +60,7 @@ var GameScreen = function GameScreen(text,text2,callback) {
     if(Game.keys['fire'] && callback) callback();
   };
 
-    //creating styles
+//creating styles
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
     canvas.font = "bold 40px arial";
