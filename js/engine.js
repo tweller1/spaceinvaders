@@ -27,13 +27,11 @@ var Game = new function() {                                                     
   };
 
   this.loadBoard = function(board) { Game.board = board; };
-//creates game speed
+
   this.loop = function() { 
     Game.board.step(30/1000); 
     Game.board.render(Game.canvas);
-    //setTimeout(Game.loop,4);
-    this.timer = setTimeout(Game.loop,4);
-    return this.timer();
+    setTimeout(Game.loop,4);
   };
 };
 
@@ -60,14 +58,14 @@ var GameScreen = function GameScreen(text,text2,callback) {
     if(Game.keys['fire'] && callback) callback();
   };
 
-//creating styles
+    //creating styles
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
-    canvas.font = "bold 40px arial";
+    canvas.font = "bold 40px Geneva";
     var measure = canvas.measureText(text);  
-    canvas.fillStyle = "#FFFFFF";
+    canvas.fillStyle = "#002776";
     canvas.fillText(text,Game.width/2 - measure.width/2,Game.height/2);
-    canvas.font = "bold 20px arial";
+    canvas.font = "bold 20px Geneva";
     var measure2 = canvas.measureText(text2);
     canvas.fillText(text2,Game.width/2 - measure2.width/2,Game.height/2 + 40);
   };

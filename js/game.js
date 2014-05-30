@@ -1,9 +1,10 @@
 //places alien sprites
 var AlienFlock = function AlienFlock() {
   this.invulnrable = true;
+//co-ordinates for Alien Flock to start
   this.dx = 10; this.dy = 0;
   this.hit = 1; this.lastHit = 0;
-    //overall speed
+    //overall speed of the alien flock
   this.speed = 5;
 
   this.draw = function() {};
@@ -11,12 +12,13 @@ var AlienFlock = function AlienFlock() {
     //if all aliens get killed
   this.die = function() {
     if(Game.board.nextLevel()) {
+    //load next levelor show 'win' screen
       Game.loadBoard(new GameBoard(Game.board.nextLevel())); 
     } else {
-      Game.callbacks['win']();
+        Game.callbacks['win']();
     }
   }
-//increases speed of the last aliens
+//increases speed as they move down the board and as there are less aliens
   this.step = function(dt) { 
     if(this.hit && this.hit != this.lastHit) {
       this.lastHit = this.hit;
@@ -25,7 +27,7 @@ var AlienFlock = function AlienFlock() {
       this.dy=0;
     }
     this.dx = this.speed * this.hit;
-
+//stops aliens moving off the board
     var max = {}, cnt = 0;
     this.board.iterate(function() {
       if(this instanceof Alien)  {
@@ -43,26 +45,31 @@ var AlienFlock = function AlienFlock() {
   };
 
 }
-
+//function for singular alien
 var Alien = function Alien(opts) {
   this.flock = opts['flock'];
+    //start aliens at frame 0
   this.frame = 0;
   this.mx = 0;
 }
-
+//draw aliens from sprite data
 Alien.prototype.draw = function(canvas) {
   Sprites.draw(canvas,this.name,this.x,this.y,this.frame);
 }
-
+//what to do when alien dies
 Alien.prototype.die = function() {
+    //play audiio
   GameAudio.play('die');
+    //increase overall flock speed
   this.flock.speed += 1;
+    //remove alien from game
   this.board.remove(this);   {
-            this.board.addSprite('explosion', this.x, this.y, this.frame);
+      //in place, draw in explosion
+            this.board.addSprite('explosion', this.x, this.y);
                         }
 }
 
-
+//How Alien spefically moves
 Alien.prototype.step = function(dt) {
   this.mx += dt * this.flock.dx;
   this.y += this.flock.dy;
@@ -173,26 +180,31 @@ Missile.prototype.die = function() {
 //setTimeout(function() {alert('hello');},
 
 
-//initialising explosion function
-
-var Explosion = function Explosion(opts) {
-        this.frame = 0;
+//initialising explosion function, no arguments 
+var Explosion = function (opts) {
+    this.frame = 0;
 };
 Explosion.prototype.draw = function(canvas) {
-    Sprites.draw(canvas,'explosion',this.x,this.y,this.frame);
+    Sprites.draw(canvas,'explosion',this.x,this.y);
     
 };
 
-Explosion.prototype.step = function() {
-     this.frame = (this.frame+1) % 3;
-};
+Explosion.prototype.step = function(dt) {
+    this.frame = (this.frame+1) % 3;
+    return true;
+    
+  };
 
-Explosion.prototype.die = function(dt) { 
 
-    if(this.frame >= 3) {
-    this.board.remove(this);
-  }
-};
+Explosion.prototype.die = function(dt) {
+    this.frame++;
+    if(this.frame <=3 ){
+        this.board.remove(this);
+  };
+    return false;
+}
+
+
 
 
 //function draw() {

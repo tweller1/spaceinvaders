@@ -40,16 +40,16 @@
     'alien1': { sx: 0,  sy: 0,  w: 24, h: 18, cls: Alien, frames: 3 },
     'alien2': { sx: 0,  sy: 18, w: 24, h: 18, cls: Alien, frames: 3 },
     'alien3': { sx: 0,  sy: 36, w: 24, h: 18, cls: Alien, frames: 3 },
-    'player': { sx: 0,  sy: 72, w: 26, h: 17, cls: Player },
-    'missile': { sx: 0,  sy: 86, w: 3,  h: 14, cls: Missile },
-    'explosion': {sx: 0, sy: 54, w: 24, h: 18, cls: Explosion, frames: 3 },
+    'player': { sx: 0,  sy: 72, w: 38, h: 28, cls: Player },
+    'missile': { sx: 0,  sy: 99, w: 15,  h: 19, cls: Missile },
+    'explosion': {sx: 0, sy: 54, w: 24, h: 18, cls: Explosion, frames: 8 },
 
    
   }
 
 //introduction to the game, wording
   function startGame() {
-    var screen = new GameScreen("Aliens have Invaded","press space to start",
+    var screen = new GameScreen("Aliens are Invading!","press space to start",
                                  function() {
                                      Game.loadBoard(new GameBoard(1));
                                  });
@@ -59,7 +59,7 @@
 
 //wording at the end of the game - if lost
   function endGame() {
-    var screen = new GameScreen("Game Over","(press space to restart)",
+    var screen = new GameScreen("Game Over","press space to restart",
                                  function() {
                                      Game.loadBoard(new GameBoard(1));
                                  });
