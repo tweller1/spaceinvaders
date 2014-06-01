@@ -12,22 +12,23 @@ var Game = new function() {                                                     
     this.width = $(this.canvas_elem).attr('width');
     this.height= $(this.canvas_elem).attr('height');
 
-      
+      //linking the variable KEY_CODES to the events they carry out when button is pushed
     $(window).keydown(function(event) {
       if(KEY_CODES[event.keyCode]) Game.keys[KEY_CODES[event.keyCode]] = true;
     });
-
+      //stops keys carrying out the actions after they have been pressed. When key is up stop the event.
     $(window).keyup(function(event) {
       if(KEY_CODES[event.keyCode]) Game.keys[KEY_CODES[event.keyCode]] = false;
     });
-
+      //setting up variables in level.js
     this.level_data = level_data;
     this.callbacks = callbacks;
     Sprites.load(sprite_data,this.callbacks['start']);
   };
-
+    // setting up the variable screens
   this.loadBoard = function(board) { Game.board = board; };
 
+    //sets the timing of the game which other functions are defined by
   this.loop = function() { 
     Game.board.step(30/1000); 
     Game.board.render(Game.canvas);
@@ -52,13 +53,13 @@ var Sprites = new function() {
     canvas.drawImage(this.image, s.sx + frame * s.w, s.sy, s.w, s.h, x,y, s.w, s.h);
   };
 }
-
+//draws out screen based on data provided in level.js
 var GameScreen = function GameScreen(text,text2,callback) {
   this.step = function(dt) {
     if(Game.keys['fire'] && callback) callback();
   };
 
-    //creating styles
+//create styles for the canvas, size, font, colours
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
     canvas.font = "bold 40px Geneva";
@@ -70,11 +71,13 @@ var GameScreen = function GameScreen(text,text2,callback) {
     canvas.fillText(text2,Game.width/2 - measure2.width/2,Game.height/2 + 40);
   };
 };
-
+ //places canvas objects based on level
 var GameBoard = function GameBoard(level_number) {
   this.removed_objs = [];
   this.missiles = 0;
   this.level = level_number;
+    
+    //setting out basic functions of the game 
   var board = this;
 
   this.add =    function(obj) { obj.board=this; this.objects.push(obj); return obj; };
@@ -89,7 +92,6 @@ var GameBoard = function GameBoard(level_number) {
     return sprite;
   };
   
-
   this.iterate = function(func) {
      for(var i=0,len=this.objects.length;i<len;i++) {
        func.call(this.objects[i]);
@@ -151,20 +153,20 @@ var GameBoard = function GameBoard(level_number) {
       }
     }
   };
-
+//creates function to move on to next level
   this.nextLevel = function() { 
     return Game.level_data[level_number + 1] ? (level_number + 1) : false 
   };
  
   this.loadLevel(Game.level_data[level_number]);
 };
-
+//creates function for audio
 var GameAudio = new function() {
   this.load_queue = [];
   this.loading_sounds = 0;
   this.sounds = {};
 
-  var channel_max = 10;		
+  var channel_max = 100;		
   audio_channels = new Array();
   for (a=0;a<channel_max;a++) {	
     audio_channels[a] = new Array();

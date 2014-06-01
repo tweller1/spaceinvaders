@@ -1,7 +1,6 @@
 //places alien sprites
 var AlienFlock = function AlienFlock() {
   this.invulnrable = true;
-//co-ordinates for Alien Flock to start
   this.dx = 10; this.dy = 0;
   this.hit = 1; this.lastHit = 0;
     //overall speed of the alien flock
@@ -15,9 +14,10 @@ var AlienFlock = function AlienFlock() {
     //load next levelor show 'win' screen
       Game.loadBoard(new GameBoard(Game.board.nextLevel())); 
     } else {
-        Game.callbacks['win']();
+        Game.callbacks['win2']();
     }
   }
+  
 //increases speed as they move down the board and as there are less aliens
   this.step = function(dt) { 
     if(this.hit && this.hit != this.lastHit) {
@@ -50,7 +50,7 @@ var Alien = function Alien(opts) {
   this.flock = opts['flock'];
     //start aliens at frame 0
   this.frame = 0;
-  this.mx = 0;
+  this.mx = 10;
 }
 //draw aliens from sprite data
 Alien.prototype.draw = function(canvas) {
@@ -65,21 +65,29 @@ Alien.prototype.die = function() {
     //remove alien from game
   this.board.remove(this);   {
       //in place, draw in explosion
-            this.board.addSprite('explosion', this.x, this.y);
+            this.board.addSprite('explosion', this.x, this.y,this.frame);
                         }
 }
 
 //How Alien spefically moves
 Alien.prototype.step = function(dt) {
+    //movement of flock across screen
   this.mx += dt * this.flock.dx;
+    //movement of flock down the screen
   this.y += this.flock.dy;
-  if(Math.abs(this.mx) > 10) {
+    //speed at which they move as a flock
+  if(Math.abs(this.mx) > 7) {
+      //determines how often flock shoots at player
     if(this.y == this.flock.max_y[this.x]) {
       this.fireSometimes();
     }
+    //moves aliens accross the screen, in the x axis
     this.x += this.mx;
+      //how far aliens can move
     this.mx = 0;
+      //couts through the sprite frames 
     this.frame = (this.frame+1) % 3;
+      //restricts canvas and makes aliens move down
     if(this.x > Game.width - Sprites.map.alien1.w * 2) this.flock.hit = -1;
     if(this.x < Sprites.map.alien1.w) this.flock.hit = 1;
   }
@@ -87,7 +95,9 @@ Alien.prototype.step = function(dt) {
 }
 //determines how often the aliens fire at the player
 Alien.prototype.fireSometimes = function() {
-      if(Math.random()*100 < 10) {
+    //fires missile randoml
+      if(Math.random()*100 < 3) {
+          //draws missile into game
         this.board.addSprite('missile',this.x + this.w/2 - Sprites.map.missile.w/2,
                                       this.y + this.h, 
                                      { dy: 100 });
@@ -147,6 +157,7 @@ Missile.prototype.draw = function(canvas) {
 }
 //missile movement
 Missile.prototype.step = function(dt) {
+    //how the missiles travel/speed
    this.y += this.dy * dt;
 //if missile hits alien, calls another function to get rid of alien
    var enemy = this.board.collide(this);
@@ -157,61 +168,36 @@ Missile.prototype.step = function(dt) {
    return (this.y < 0 || this.y > Game.height) ? false : true;
 }
 //when missile hits an object get rid of missile
-Missile.prototype.die = function() {
+Missile.prototype.die = function() {  
+    //when user is not pressing missile remove from game
   if(this.player) this.board.missiles--;
   if(this.board.missiles < 0) this.board.missiles=0;
    this.board.remove(this);
 }
 
-//initialising pause function
-//if(Game.keys['p']) {
- //       function pauseGame() {
-//          if (!gamePaused) {
-//            game =  this.loop
-//            gamePaused = true;
-//                } else if (gamePaused) {
-//            game = setTimeout(gameLoop, 1000 / 30);
-//            gamePaused = false;
- // }
-//}
-
-
-//if(Game.keys['p']){
-//setTimeout(function() {alert('hello');},
-
-
 //initialising explosion function, no arguments 
-var Explosion = function (opts) {
-    this.frame = 0;
+var Explosion = function Explosion(opts) {
+        this.frame= 0;
 };
 Explosion.prototype.draw = function(canvas) {
-    Sprites.draw(canvas,'explosion',this.x,this.y);
+    Sprites.draw(canvas,'explosion',this.x,this.y,this.frame);
     
 };
 
-Explosion.prototype.step = function(dt) {
-    this.frame = (this.frame+1) % 3;
-    return true;
-    
+Explosion.prototype.step = function() {
+   this.frame++;
   };
 
 
-Explosion.prototype.die = function(dt) {
-    this.frame++;
-    if(this.frame <=3 ){
-        this.board.remove(this);
-  };
-    return false;
+Explosion.prototype.die = function() {
+    if(this.frame <=3 );{
+        this.board.remove('explosion');
+    }
 }
 
+//var pauseGame() {
+   //if(Game.keys['p']); {
+     //  Game.board.setTimeout(partB,1000);
+   //}
+//}
 
-
-
-//function draw() {
-//var ctx = document.getElementById('explosion')
-//var ctx = canvas.getContext('2d'); //create new img element
-//img.src = spriteData.explosion //set source path
-//img.addEventListener("load", function() {
-    //execute drawImage statements here
-//}, false);
-//img.src = 'myImage.png';
