@@ -1,5 +1,5 @@
 var Game = new function() {                                                     //changing keys             
-  var KEY_CODES = { 37 :'left', 40 : 'up', 39 : 'right', 38: 'down', 32 :'fire', 112 : 'p' };
+  var KEY_CODES = { 37 :'left', 40 : 'up', 39 : 'right', 38: 'down', 32 :'fire', 112 : 'p', 13 : 'enter' };
   this.keys = {};
 
     
@@ -55,18 +55,19 @@ var Sprites = new function() {
 }
 //draws out screen based on data provided in level.js
 var GameScreen = function GameScreen(text,text2,callback) {
+    //creates the spacebar function to start next level/start game/fire
   this.step = function(dt) {
-    if(Game.keys['fire'] && callback) callback();
+    if(Game.keys['enter'] && callback) callback();
   };
 
 //create styles for the canvas, size, font, colours
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
-    canvas.font = "bold 40px Geneva";
+    canvas.font = '40px bold Autowide';
     var measure = canvas.measureText(text);  
     canvas.fillStyle = "#002776";
     canvas.fillText(text,Game.width/2 - measure.width/2,Game.height/2);
-    canvas.font = "bold 20px Geneva";
+    canvas.font = '20px bold Autowide';
     var measure2 = canvas.measureText(text2);
     canvas.fillText(text2,Game.width/2 - measure2.width/2,Game.height/2 + 40);
   };
@@ -76,6 +77,7 @@ var GameBoard = function GameBoard(level_number) {
   this.removed_objs = [];
   this.missiles = 0;
   this.level = level_number;
+   
     
     //setting out basic functions of the game 
   var board = this;
@@ -104,7 +106,7 @@ var GameBoard = function GameBoard(level_number) {
     }
     return false;
   };
-
+//removes objects from game upon death
   this.step = function(dt) { 
     this.removed_objs = [];
     this.iterate(function() { 
@@ -126,15 +128,34 @@ var GameBoard = function GameBoard(level_number) {
     return !((o1.y+o1.h-1<o2.y) || (o1.y>o2.y+o2.h-1) ||
              (o1.x+o1.w-1<o2.x) || (o1.x>o2.x+o2.w-1));
   };
-
+//when objects interacts
   this.collide = function(obj) {
     return this.detect(function() {
       if(obj != this && !this.invulnrable)
        return board.collision(obj,this) ? this : false;
     });
   };
-
+    
+//changes background for each level
   this.loadLevel = function(level) {
+        
+      if (level_number == 1){
+          $('#gameboard').css('background-image',
+'url("images/background.png")');
+     }
+     else if (level_number == 2){
+         console.log(level_number)
+         $('#gameboard').css('background-image',
+'url("images/backgroun3.png")');
+     }
+     else if (level_number == 3){
+         console.log(level_number)
+         $('#gameboard').css('background-image',
+'url("images/aloneinspace.png")');
+     }
+      
+      
+      
     this.objects = [];
     this.player = this.addSprite('player', // Sprite
                                  Game.width/2, // X
@@ -155,11 +176,15 @@ var GameBoard = function GameBoard(level_number) {
   };
 //creates function to move on to next level
   this.nextLevel = function() { 
-    return Game.level_data[level_number + 1] ? (level_number + 1) : false 
+      //sets out the function to add another number to the previous level count or return false if not possible
+    return Game.level_data[level_number + 1] ? (level_number + 1) : false;
   };
  
   this.loadLevel(Game.level_data[level_number]);
+
 };
+
+
 //creates function for audio
 var GameAudio = new function() {
   this.load_queue = [];

@@ -9,28 +9,30 @@ var AlienFlock = function AlienFlock() {
   this.draw = function() {};
 
     //if all aliens get killed
-  this.die = function() {
+this.die = function() {
     if(Game.board.nextLevel()) {
-    //load next levelor show 'win' screen
-      Game.loadBoard(new GameBoard(Game.board.nextLevel())); 
-    } else {
         Game.callbacks['win2']();
+    } else {
+      Game.callbacks['win2']();
     }
   }
-  
 //increases speed as they move down the board and as there are less aliens
   this.step = function(dt) { 
     if(this.hit && this.hit != this.lastHit) {
       this.lastHit = this.hit;
       this.dy = this.speed;
+//this.dy changes depending on the y axis mainly - as the aliens get lower down the screen the dy becomes larger, however if aliens are hit this dy is subject to change between around 15 & 20
     } else {
-      this.dy=0;
-    }
+      (this.dy=0);
+            }
+      
+
     this.dx = this.speed * this.hit;
 //stops aliens moving off the board
     var max = {}, cnt = 0;
     this.board.iterate(function() {
       if(this instanceof Alien)  {
+      
         if(!max[this.x] || this.y > max[this.x]) {
           max[this.x] = this.y; 
         }
@@ -85,18 +87,19 @@ Alien.prototype.step = function(dt) {
     this.x += this.mx;
       //how far aliens can move
     this.mx = 0;
-      //couts through the sprite frames 
+      //counts through the sprite frames 
     this.frame = (this.frame+1) % 3;
       //restricts canvas and makes aliens move down
     if(this.x > Game.width - Sprites.map.alien1.w * 2) this.flock.hit = -1;
     if(this.x < Sprites.map.alien1.w) this.flock.hit = 1;
-  }
+    }
+  
   return true;
 }
 //determines how often the aliens fire at the player
 Alien.prototype.fireSometimes = function() {
     //fires missile randoml
-      if(Math.random()*100 < 3) {
+      if(Math.random()*100 < 0) {
           //draws missile into game
         this.board.addSprite('missile',this.x + this.w/2 - Sprites.map.missile.w/2,
                                       this.y + this.h, 
@@ -186,12 +189,14 @@ Explosion.prototype.draw = function(canvas) {
 
 Explosion.prototype.step = function() {
    this.frame++;
+
   };
 
 
 Explosion.prototype.die = function() {
-    if(this.frame <=3 );{
-        this.board.remove('explosion');
+    if(this.frame =3 ){
+        this.board.remove(this);
+
     }
 }
 
@@ -201,3 +206,8 @@ Explosion.prototype.die = function() {
    //}
 //}
 
+
+  // console.log(this.y);
+   //           if(this.y>=16){
+ //       console.log('I am dead');
+   //     Game.callbacks['die'];
