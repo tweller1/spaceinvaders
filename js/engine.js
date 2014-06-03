@@ -10,8 +10,8 @@ var Game = new function() {                                                     
       //what to do if browser cannot run canvas
     if(!this.canvas) { return alert("You need to upgrade your browser to play this game"); }
     this.width = $(this.canvas_elem).attr('width');
-    this.height= $(this.canvas_elem).attr('height');
-
+    this.height= $(this.canvas_elem).attr('height');  
+      
       //linking the variable KEY_CODES to the events they carry out when button is pushed
     $(window).keydown(function(event) {
       if(KEY_CODES[event.keyCode]) Game.keys[KEY_CODES[event.keyCode]] = true;
@@ -60,18 +60,22 @@ var GameScreen = function GameScreen(text,text2,callback) {
     if(Game.keys['enter'] && callback) callback();
   };
 
+
 //create styles for the canvas, size, font, colours
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
-    canvas.font = '40px bold Autowide';
+    canvas.font = '40px bold "Pixelogist"';
     var measure = canvas.measureText(text);  
     canvas.fillStyle = "#002776";
     canvas.fillText(text,Game.width/2 - measure.width/2,Game.height/2);
-    canvas.font = '20px bold Autowide';
+    canvas.font = '20px bold "Pixelogist"';
     var measure2 = canvas.measureText(text2);
     canvas.fillText(text2,Game.width/2 - measure2.width/2,Game.height/2 + 40);
   };
 };
+
+$('#view-css').text($('#css').text());
+$('#view-script').text($('#script').text());
  //places canvas objects based on level
 var GameBoard = function GameBoard(level_number) {
   this.removed_objs = [];
