@@ -61,7 +61,9 @@ var GameScreen = function GameScreen(text,text2,callback) {
   };
 
 
-//create styles for the canvas, size, font, colours
+//create styles for the canvas, size, font, colours. 
+//A lot of issues attempting to use google fonts - Pixelogist downloaded from dafont.com 
+    //font is not to work in internet explorer
   this.render = function(canvas) {
     canvas.clearRect(0,0,Game.width,Game.height);
     canvas.font = '40px bold "Pixelogist"';
@@ -155,8 +157,19 @@ var GameBoard = function GameBoard(level_number) {
      else if (level_number == 3){
          console.log(level_number)
          $('#gameboard').css('background-image',
-'url("images/aloneinspace.png")');
+'url("images/backgroun4.png")');
      }
+    else if (level_number == 4){
+         console.log(level_number)
+         $('#gameboard').css('background-image',
+'url("images/backgroun5.png")');
+     }
+    else if (level_number == 5){
+         console.log(level_number)
+         $('#gameboard').css('background-image',
+'url("images/backgroun6.png")');
+     }
+      
       
       
       

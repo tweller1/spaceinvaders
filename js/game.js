@@ -11,7 +11,8 @@ var AlienFlock = function AlienFlock() {
     //if all aliens get killed
 this.die = function() {
     if(Game.board.nextLevel()) {
-        Game.callbacks['win2']();
+        //Game.callbacks['win2']();
+        Game.loadBoard(new GameBoard(Game.board.nextLevel()))
     } else {
       Game.callbacks['win2']();
     }
@@ -99,7 +100,7 @@ Alien.prototype.step = function(dt) {
 //determines how often the aliens fire at the player
 Alien.prototype.fireSometimes = function() {
     //fires missile randoml
-      if(Math.random()*100 < 0) {
+      if(Math.random()*100 < 3) {
           //draws missile into game
         this.board.addSprite('missile',this.x + this.w/2 - Sprites.map.missile.w/2,
                                       this.y + this.h, 
